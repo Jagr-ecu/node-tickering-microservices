@@ -1,0 +1,21 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: jubertgoya/auth
+      #context es la carpeta que contiene toda la imagen
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          #ruta de archivos que skaffold va a observar para sincornizar cambios 
+          - src: 'src/**/*.ts'
+            #destino en donde se lo va a guardar en el contenedor
+            dest: .
