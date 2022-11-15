@@ -1,8 +1,10 @@
 import express, { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
-import { DatabaseConnectionError } from "../errors/DatabaseConnectionError";
 
-import { ResquestValidationError } from "../errors/RequestValidationError";
+import { BadRequestError } from "../errors/bad-request-error";
+import { DatabaseConnectionError } from "../errors/database-connection-error";
+import { ResquestValidationError } from "../errors/request-validation-error";
+import { User } from "../models/user";
 
 const router = express.Router();
 
@@ -15,7 +17,7 @@ router.get(
          .isLength({ min: 4, max: 20 })
          .withMessage("La contraseña debe ser de 4 a 20 carácteres"),
    ],
-   (req: Request, res: Response) => {
+   async (req: Request, res: Response) => {
       //valida si hay errores segun validacion de body de arreglo anterior (email, password)
       const errors = validationResult(req);
 
@@ -25,14 +27,16 @@ router.get(
 
       const { email, password } = req.body;
 
-      console.log('creando un usuario');
-      throw new DatabaseConnectionError();
+      const existingUser = await User.findOne({ email });
 
-      res.send({
-        email,
-        password
-      })
+      if (existingUser) {
+         throw new BadRequestError('Email ya en uso');
+      }
 
+      const user = User.build({ email, password });
+      await user.save();
+
+      res.status(201).send(user);
    }
 );
 

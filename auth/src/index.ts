@@ -1,11 +1,13 @@
 import express from "express";
 import { json } from "body-parser";
-import { currentUserRouter } from "./routes/currentUser";
-import { signInRouter } from "./routes/signIn";
-import { signUpRouter } from "./routes/singUp";
-import { signOutRouter } from "./routes/signOut";
-import { errorHandler } from "./middlewares/errorHandler";
-import { NotFoundError } from "./errors/NotFoundError";
+import mongoose from "mongoose";
+
+import { currentUserRouter } from "./routes/current-user";
+import { signInRouter } from "./routes/sign-in";
+import { signUpRouter } from "./routes/sing-up";
+import { signOutRouter } from "./routes/sign-out";
+import { errorHandler } from "./middlewares/error-handler";
+import { NotFoundError } from "./errors/not-found-error";
 
 const app = express();
 app.use(json());
@@ -22,6 +24,18 @@ app.all('*', async (req, res, next) => {
 
 app.use(errorHandler);
 
-app.listen(3000, () => {
-    console.log('Auth en Puerto 3000');
-});
+const start = async () => {
+    try {
+        await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
+        console.log('conectando a mongo db');
+    } catch (error) {
+        console.error(error);
+    }
+
+    app.listen(3000, () => {
+        console.log('Auth en puerto 3000');
+    });
+};
+
+start();
+
