@@ -1,2 +1,15 @@
-el puerto 27017 siempre se debe usar con mongo
-cada que vez se reinicie el pod de mongo todos los datos se borraran
+MICROSERVICIOS
+-   revisar sobre la autenticacion en microservicios ya que puede ser complicado
+
+KUBERNETES
+-   el puerto 27017 siempre se debe usar con mongo
+    cada que vez se reinicie el pod de mongo todos los datos se borraran
+
+-   creando un secreto en kubernetes
+    kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf
+
+JAVASCRIPT
+-   const object = { name: 'person', toJSON() { return name; } }; // el metodo toJSON() 
+    sobreescribe lo que presentara al aplicarle un JSON.stringify()
+
+-   delete ret.password; //remueve una propiedad de un objeto

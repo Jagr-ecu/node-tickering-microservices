@@ -1,12 +1,13 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
+import { body } from "express-validator";
+import jwt from "jsonwebtoken"
 
 import { BadRequestError } from "../errors/bad-request-error";
-import { DatabaseConnectionError } from "../errors/database-connection-error";
-import { ResquestValidationError } from "../errors/request-validation-error";
+import { validateRequest } from "../middlewares/validate-request";
 import { User } from "../models/user";
 
 const router = express.Router();
+
 
 router.get(
    "/api/users/signup",
@@ -17,14 +18,8 @@ router.get(
          .isLength({ min: 4, max: 20 })
          .withMessage("La contraseña debe ser de 4 a 20 carácteres"),
    ],
+   validateRequest,
    async (req: Request, res: Response) => {
-      //valida si hay errores segun validacion de body de arreglo anterior (email, password)
-      const errors = validationResult(req);
-
-      if (!errors.isEmpty()) {
-        throw new ResquestValidationError(errors.array());
-      }
-
       const { email, password } = req.body;
 
       const existingUser = await User.findOne({ email });
@@ -35,6 +30,20 @@ router.get(
 
       const user = User.build({ email, password });
       await user.save();
+
+      // generar jwt
+      const userJwt = jwt.sign(
+         {
+         id: user.id,
+         email: user.email
+         }, 
+         process.env.JWT_KEY!
+      );
+
+      //guardar en el objecto de la sesion
+      req.session = {
+         jwt: userJwt
+      };
 
       res.status(201).send(user);
    }

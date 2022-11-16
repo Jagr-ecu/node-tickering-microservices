@@ -9,7 +9,7 @@ interface UserAttrs {
 }
 
 //una interfaz que describe las propiedades que el model de User tiene
-interface UserModel extends mongoose.Model<any> {
+interface UserModel extends mongoose.Model<UserDoc> {
     build(attrs: UserAttrs): UserDoc;
 }
 
@@ -19,6 +19,7 @@ interface UserDoc extends mongoose.Document {
     password: string;
 } 
 
+//con toJSON se formatea el objecto
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -28,6 +29,15 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+}, {
+    toJSON: {
+        transform(doc, ret) {
+            ret.id = ret._id;
+            delete ret._id
+            delete ret.password;
+            delete ret.__v;
+        }
+    }
 });
 
 //funcion middleware que implementa mongoose

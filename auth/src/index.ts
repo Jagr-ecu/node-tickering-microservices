@@ -1,16 +1,24 @@
 import express from "express";
 import { json } from "body-parser";
 import mongoose from "mongoose";
+import cookieSession from "cookie-session";
 
 import { currentUserRouter } from "./routes/current-user";
-import { signInRouter } from "./routes/sign-in";
-import { signUpRouter } from "./routes/sing-up";
-import { signOutRouter } from "./routes/sign-out";
+import { signInRouter } from "./routes/signin";
+import { signUpRouter } from "./routes/singup";
+import { signOutRouter } from "./routes/signout";
 import { errorHandler } from "./middlewares/error-handler";
 import { NotFoundError } from "./errors/not-found-error";
 
 const app = express();
+app.set('trust proxy', true);
 app.use(json());
+app.use(
+    cookieSession({
+        signed: false,
+        secure: true
+    })
+);
 
 app.use(currentUserRouter);
 app.use(signInRouter);
@@ -25,6 +33,10 @@ app.all('*', async (req, res, next) => {
 app.use(errorHandler);
 
 const start = async () => {
+    if(!process.env.JWY_KEY){
+        throw new Error('JWT_KEY debe ser definido');
+    }
+
     try {
         await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
         console.log('conectando a mongo db');
@@ -38,4 +50,3 @@ const start = async () => {
 };
 
 start();
-
