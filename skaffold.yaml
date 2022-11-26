@@ -7,6 +7,7 @@ deploy:
 build:
   local:
     push: false
+  #setup file syncing
   artifacts:
     - image: jubertgoya/auth
       #context es la carpeta que contiene toda la imagen
@@ -18,4 +19,12 @@ build:
           #ruta de archivos que skaffold va a observar para sincornizar cambios 
           - src: 'src/**/*.ts'
             #destino en donde se lo va a guardar en el contenedor
+            dest: .
+    - image: jubertgoya/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
             dest: .

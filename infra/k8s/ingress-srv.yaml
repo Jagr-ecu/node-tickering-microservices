@@ -17,3 +17,12 @@ spec:
                 name: auth-srv
                 port:
                   number: 3000
+          #make sure that lsit the client service at the end, because if we listed at the top
+          #any incoming request 
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: client-srv
+                port:
+                  number: 3000
