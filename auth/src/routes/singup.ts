@@ -9,7 +9,7 @@ import { User } from "../models/user";
 const router = express.Router();
 
 
-router.get(
+router.post(
    "/api/users/signup",
    [
       body("email").isEmail().withMessage("Email incorrecto"),
