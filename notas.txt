@@ -8,6 +8,28 @@ KUBERNETES
 -   creando un secreto en kubernetes
     kubectl create secret generic jwt-secret --from-literal=JWT_KEY=asdf
 
+-   hay que crear las imagenes antes de ejecutar skaffold
+
+-   para conexion dentro dentro del pod de next hay que fijarse en el namespace
+    kubectl get services -n ingress-nginx
+    en nombre del servicio de nginx es ingress-nginx-controller
+
+NEXTJS
+-   no se tiene la habilidad de actualizar los states, ni usar lifecycle methods de los componentes
+
+-   next se comunica directamente con el servicio dentro de nginx
+
+-   las solicitudes que se hacen desde los componentes de react o navegador usaran de dominio un 
+    string vacio ""
+
+-   las solicitudes que se hacen de getInitialProps(se ejecuta en el servidor cuando se inicia la pagina) 
+    que se pueden ejecutar desde el cliente o servidor necesitamos averiguar cuál es el env para que podamos usar el 
+    dominio correcto
+
+-   Page component getinitialProps: context === { req, res }
+
+-   Custom App Component getinitialProps (_app.js): context === { Component, ctx: { req, res }}
+
 JAVASCRIPT
 -   const object = { name: 'person', toJSON() { return name; } }; // el metodo toJSON() 
     sobreescribe lo que presentara al aplicarle un JSON.stringify()
