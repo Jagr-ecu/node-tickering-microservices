@@ -4,13 +4,13 @@ import { app } from "./app";
 
 
 const start = async () => {
-    if(!process.env.JWY_KEY){
+    if(!process.env.JWT_KEY){
         throw new Error('JWT_KEY debe ser definido');
     }
 
     try {
         //url de servicio de kubernetes
-        await mongoose.connect('mongodb://auth-mongo-srv:27017/auth');
+        await mongoose.connect('mongodb://auth-mongo-srv:27017/auth', {});
         console.log('conectando a mongo db');
     } catch (error) {
         console.error(error);

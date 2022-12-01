@@ -14,6 +14,8 @@ KUBERNETES
     kubectl get services -n ingress-nginx
     en nombre del servicio de nginx es ingress-nginx-controller
 
+-   kubectl exec -it <pod-id> sh => para correr shell dentro de contenedor
+
 NEXTJS
 -   no se tiene la habilidad de actualizar los states, ni usar lifecycle methods de los componentes
 
@@ -35,3 +37,5 @@ JAVASCRIPT
     sobreescribe lo que presentara al aplicarle un JSON.stringify()
 
 -   delete ret.password; //remueve una propiedad de un objeto
+
+-   opcion para compartir codigo es mediante un npm package que se creo

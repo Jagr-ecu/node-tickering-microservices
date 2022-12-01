@@ -2,36 +2,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: client-depl
-#spec section - describe how this deployment should behave
 spec:
-  #replicas will run 1 single pod
   replicas: 1
   selector:
     matchLabels:
       app: client
-  #template section describes how every pod is it created and managed by this deployment should behave
   template:
-    #labels how the deployment is going to find the set of pods that it is supposed to manage
     metadata:
       labels:
         app: client
-    # spec describe how every pod should behave
-    spec: 
+    spec:
       containers:
         - name: client
           image: jubertgoya/client
 ---
-#we need the service to allow requests inside the cluster to get access to this pod
 apiVersion: v1
 kind: Service
 metadata:
   name: client-srv
 spec:
-  #is how the service is gotta find the pods by searching the template-metadata-labels-app in Deployment 
   selector:
     app: client
   ports:
-      #the name of the port is not important, just for logging purposes
     - name: client
       protocol: TCP
       port: 3000

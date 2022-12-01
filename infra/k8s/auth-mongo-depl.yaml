@@ -4,17 +4,17 @@ metadata:
   name: auth-mongo-depl
 spec:
   replicas: 1
-  selector: 
-    matchLabels: 
+  selector:
+    matchLabels:
       app: auth-mongo
-    template:
-      metadata:
-        labels:
-          app: auth-mongo
-      spec:
-        containers:
-          - name: auth-mongo
-            image: mongo
+  template:
+    metadata:
+      labels:
+        app: auth-mongo
+    spec:
+      containers:
+        - name: auth-mongo
+          image: mongo
 ---
 apiVersion: v1
 kind: Service

@@ -11,13 +11,13 @@ spec:
     metadata:
       labels:
         app: auth
-    spec: 
+    spec:
       containers:
         - name: auth
           image: jubertgoya/auth
           env:
             - name: JWT_KEY
-              valueFrom: 
+              valueFrom:
                 secretKeyRef:
                   name: jwt-secret
                   key: JWT_KEY
