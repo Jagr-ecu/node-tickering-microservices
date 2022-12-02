@@ -4,6 +4,7 @@ import { app } from "./app";
 
 
 const start = async () => {
+    //los .env se los obtiene de kubernetes, se los establecio en el depl
     if(!process.env.JWT_KEY){
         throw new Error('JWT_KEY debe ser definido');
     }
